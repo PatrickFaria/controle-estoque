@@ -8,7 +8,7 @@ Linguagem: Java.
 
 Framework: Spring - Versão 2.2.9.RELEASE.
 
-Banco da Dados: MySql.
+Banco de Dados: MySql.
 
 Versionamento do Banco de Dados: Flyway.
 
