@@ -17,17 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.estoque.controle.api.controller.openapi.ProdutoControllerOpenApi;
 import com.estoque.controle.domain.model.Produto;
 import com.estoque.controle.domain.repository.ProdutoRepository;
 import com.estoque.controle.domain.service.CadastroProdutoService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-@Api(tags = "Produtos")
 @RestController
 @RequestMapping(value = "/produtos")
-public class ProdutoController {
+public class ProdutoController implements ProdutoControllerOpenApi {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
@@ -35,26 +32,22 @@ public class ProdutoController {
 	@Autowired
 	private CadastroProdutoService cadastroProdutoService;
 
-	@ApiOperation("Lista os Produtos")
 	@GetMapping
 	public List<Produto> listar() {
 		return produtoRepository.findAll();
 	}
 
-	@ApiOperation("Busca um Produto por Id")
 	@GetMapping("/{produtoId}")
 	public Produto buscar(@PathVariable Long produtoId) {
 		return cadastroProdutoService.buscarOuFalhar(produtoId);
 	}
 
-	@ApiOperation("Cadastra um Produto")
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Produto adicionar(@RequestBody @Valid Produto produto) {
 		return cadastroProdutoService.salvar(produto);
 	}
 
-	@ApiOperation("Atualiza um Produto por Id")
 	@PutMapping("/{produtoId}")
 	public Produto atualizar(@PathVariable Long produtoId, @RequestBody Produto produto) {
 		Produto produtoAtual = cadastroProdutoService.buscarOuFalhar(produtoId);
@@ -63,7 +56,6 @@ public class ProdutoController {
 		return cadastroProdutoService.salvar(produtoAtual);
 	}
 
-	@ApiOperation("Exclui um Produto por Id")
 	@DeleteMapping("/{produtoId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long produtoId) {
