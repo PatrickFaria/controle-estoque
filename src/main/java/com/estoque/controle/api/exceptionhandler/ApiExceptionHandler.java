@@ -31,8 +31,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private static final String DETAIL_REQUISICAO_INVALIDA = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
 
 	@Autowired
-    private MessageSource messageSource;
-	
+	private MessageSource messageSource;
+
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -51,42 +51,38 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex
-            , HttpHeaders headers, HttpStatus status, WebRequest request) {
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
-	
-	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
 
-        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        String detail = String.format("Um ou mais campos  estão inválidos. Faça o preenchimento correto e tente novamente");
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
 
-        List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
-                .map(objectError -> {
-                    String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+		String detail = String
+				.format("Um ou mais campos  estão inválidos. Faça o preenchimento correto e tente novamente");
 
-                    String name = objectError.getObjectName();
+		List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream().map(objectError -> {
+			String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
-                    if (objectError instanceof FieldError) {
-                        name = ((FieldError) objectError).getField();
-                    }
+			String name = objectError.getObjectName();
 
-                    return Problem.Object.builder().name(name)
-                            .userMessage(message)
-                            .build();
-                }).collect(Collectors.toList());
+			if (objectError instanceof FieldError) {
+				name = ((FieldError) objectError).getField();
+			}
 
-        Problem problem = createProblemBuilder(status, problemType, detail)
-                .userMessage(detail)
-                .objects(problemObjects)
-                .timestamp(LocalDateTime.now())
-                .build();
+			return Problem.Object.builder().name(name).userMessage(message).build();
+		}).collect(Collectors.toList());
 
-        return handleExceptionInternal(ex, problem, headers, status, request);
-    }
-	
+		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).objects(problemObjects)
+				.timestamp(LocalDateTime.now()).build();
+
+		return handleExceptionInternal(ex, problem, headers, status, request);
+	}
+
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 
@@ -96,7 +92,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = String.format(
 				"A propriedade '%s' recebeu valor '%s', que é de um tipo inválido."
 						+ " Corrija e informe um valor compatível com o tipo %s",
-						path, ex.getValue(), ex.getTargetType().getSimpleName());
+				path, ex.getValue(), ex.getTargetType().getSimpleName());
 
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 
@@ -114,14 +110,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
-	
+
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> handleUnexpectedTypeException(DataIntegrityViolationException ex, WebRequest request) {
 
 		ProblemType problemType = ProblemType.CODIGO_EXISTENTE;
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		String detail = DETAIL_CODIGO_EXISTENTE;
-		
+
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
