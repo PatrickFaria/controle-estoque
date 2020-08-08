@@ -21,7 +21,7 @@ import com.estoque.controle.api.controller.openapi.ProdutoControllerOpenApi;
 import com.estoque.controle.domain.model.Produto;
 import com.estoque.controle.domain.repository.ProdutoRepository;
 import com.estoque.controle.domain.service.CadastroProdutoService;
-
+   
 @RestController
 @RequestMapping(value = "/produtos")
 public class ProdutoController implements ProdutoControllerOpenApi {
