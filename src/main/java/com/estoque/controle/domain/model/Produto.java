@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.UniqueElements;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,6 @@ public class Produto {
     @ApiModelProperty(value = "Nome do Produto",example = "Roupa", required = true)
 	private String nome;
 	
-    @UniqueElements
     @Column(nullable = false, unique = true)
     @ApiModelProperty(value = "Código do Produto",example = "534262", required = true)
     private Long codigo;
