@@ -5,8 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ProblemType {
 
-	MENSAGEM_INCOMPREENSIVEL("/mensagem-incompreensivel","Mensagem incompreesível"),	
-	PRODUTO_NÃO_ENCONTRADO("/produto-nao-encontrado","Produto não encontrado");	
+	CODIGO_EXISTENTE("/codigo-existente","Código já existente."),	
+	MENSAGEM_INCOMPREENSIVEL("/mensagem-incompreensivel","Mensagem incompreesível."),	
+	PRODUTO_NÃO_ENCONTRADO("/produto-nao-encontrado","Produto não encontrado.");	
 	
 	private String title;
 	private String uri;

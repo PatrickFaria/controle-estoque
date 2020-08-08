@@ -2,6 +2,8 @@ package com.estoque.controle.api.exceptionhandler;
 
 import java.util.stream.Collectors;
 
+import javax.validation.UnexpectedTypeException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-	private static final String REQUISICAO_INVALIDA = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+	private static final String DETAIL_CODIGO_EXISTENTE = "Código já existente. Por favor insira um código diferente.";
+	private static final String DETAIL_REQUISICAO_INVALIDA = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -30,7 +33,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
-		String detail = REQUISICAO_INVALIDA;
+		String detail = DETAIL_REQUISICAO_INVALIDA;
 
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 
@@ -59,6 +62,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemType problemType = ProblemType.PRODUTO_NÃO_ENCONTRADO;
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		String detail = ex.getMessage();
+
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	
+	@ExceptionHandler(UnexpectedTypeException.class)
+	public ResponseEntity<?> handleUnexpectedTypeException(UnexpectedTypeException ex, WebRequest request) {
+
+		ProblemType problemType = ProblemType.CODIGO_EXISTENTE;
+		HttpStatus status = HttpStatus.CONFLICT;
+		String detail = DETAIL_CODIGO_EXISTENTE;
 
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 
