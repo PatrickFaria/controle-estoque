@@ -1,10 +1,10 @@
 <h1>Controle de Estoque API<h1/>
 
-API aberta para gestores de estoque. Responsável por auxiliar no controle dos produtos em um estoque.
+<p>API aberta para gestores de estoque. Responsável por auxiliar no controle dos produtos em um estoque.<p/>
 
 <h2>Documentação<h2/>
 
-SpringFox - Swagger2 (Link: http://localhost:8080/swagger-ui.html).
+<p>SpringFox - Swagger2 (Link: http://localhost:8080/swagger-ui.html).<p/>
 
 <h2>Descrição técnica do sistema<h2/>
 
