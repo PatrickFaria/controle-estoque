@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+	private static final String REQUISICAO_INVALIDA = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -28,7 +30,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
-		String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe.";
+		String detail = REQUISICAO_INVALIDA;
 
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 
